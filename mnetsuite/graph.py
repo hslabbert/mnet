@@ -255,13 +255,19 @@ class mnet_graph:
 
 		ipaddr = None
 		if (USE_NETADDR):
-			ipaddr = IPAddress(ip)
+			try:
+				ipaddr = IPAddress(ip)
+			except:
+				pass
 
 		# check exclude nodes
 		for e in self.config.exclude_subnets:
 			if (USE_NETADDR):
-				if (ip in IPNetwork(e)):
-					return 0
+				try:
+					if (ip in IPNetwork(e)):
+						return 0
+				except:
+					pass
 			else:
 				if (is_ipv4_in_cidr(ip, e)):
 					return 0
@@ -272,8 +278,11 @@ class mnet_graph:
 
 		for s in self.config.allowed_subnets:
 			if (USE_NETADDR):
-				if (ipaddr in IPNetwork(s)):
-					return 1
+				try:
+					if (ipaddr in IPNetwork(s)):
+						return 1
+				except:
+					pass
 			else:
 				if (is_ipv4_in_cidr(ip, s)):
 					return 1
